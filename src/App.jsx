@@ -1,7 +1,6 @@
-import "./App.scss";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Header from "./components/Header/Header";
-import Footer from "./components/Footer/Footer";
+import { Route, Routes } from "react-router-dom";
+
+import { AppProvider } from "./context/AppContext";
 
 import Customer from "./pages/Customer/Customer";
 import CustomerServiceExecutive from "./pages/CustomerServiceExecutive/CustomerServiceExecutive";
@@ -10,6 +9,11 @@ import ComplaintSupervisor from "./pages/ComplaintSupervisor/ComplaintSupervisor
 import ComplaintCategorization from "./pages/ComplaintCategorization/ComplaintCategorization";
 import SupportEngineer from "./pages/SupportEngineer/SupportEngineer";
 import TeamLead from "./pages/TeamLead/TeamLead";
+
+import Header from "./components/Header/Header";
+import Footer from "./components/Footer/Footer";
+
+import "./App.scss";
 
 function Home() {
   return (
@@ -43,27 +47,31 @@ function Home() {
 function App() {
   return (
     // <BrowserRouter>
-    <div className="App">
-      <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route
-          path="/customer-service-executive"
-          element={<CustomerServiceExecutive />}
-        />
-        <Route path="/complaint-supervisor" element={<ComplaintSupervisor />} />
-        <Route path="/complaint-manager" element={<ComplaintManager />} />
-        <Route path="/support-engineer" element={<SupportEngineer />} />
-        <Route path="/team-lead" element={<TeamLead />} />
-        <Route path="/customer" element={<Customer />} />
-        <Route
-          path="/complaint-categorization"
-          element={<ComplaintCategorization />}
-        />
-      </Routes>
-      <Footer />
-    </div>
-    // </BrowserRouter>
+    <AppProvider>
+      <div className="App">
+        <Header />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/customer-service-executive"
+            element={<CustomerServiceExecutive />}
+          />
+          <Route
+            path="/complaint-supervisor"
+            element={<ComplaintSupervisor />}
+          />
+          <Route path="/complaint-manager" element={<ComplaintManager />} />
+          <Route path="/support-engineer" element={<SupportEngineer />} />
+          <Route path="/team-lead" element={<TeamLead />} />
+          <Route path="/customer" element={<Customer />} />
+          <Route
+            path="/complaint-categorization"
+            element={<ComplaintCategorization />}
+          />
+        </Routes>
+        <Footer />
+      </div>
+    </AppProvider>
   );
 }
 
