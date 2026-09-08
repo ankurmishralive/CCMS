@@ -6,7 +6,6 @@ import Customer from "./pages/Customer/Customer";
 import CustomerServiceExecutive from "./pages/CustomerServiceExecutive/CustomerServiceExecutive";
 import ComplaintManager from "./pages/ComplaintManager/ComplaintManager";
 import ComplaintSupervisor from "./pages/ComplaintSupervisor/ComplaintSupervisor";
-import ComplaintCategorization from "./pages/ComplaintCategorization/ComplaintCategorization";
 import SupportEngineer from "./pages/SupportEngineer/SupportEngineer";
 import TeamLead from "./pages/TeamLead/TeamLead";
 
@@ -64,10 +63,6 @@ function App() {
           <Route path="/support-engineer" element={<SupportEngineer />} />
           <Route path="/team-lead" element={<TeamLead />} />
           <Route path="/customer" element={<Customer />} />
-          <Route
-            path="/complaint-categorization"
-            element={<ComplaintCategorization />}
-          />
         </Routes>
         <Footer />
       </div>

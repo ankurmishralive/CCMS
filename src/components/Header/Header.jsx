@@ -8,7 +8,6 @@ const menuItems = [
   { label: "Support Engineer", path: "/support-engineer" },
   { label: "Team Lead", path: "/team-lead" },
   { label: "Customer", path: "/customer" },
-  { label: "Complaint Categorization", path: "/complaint-categorization" },
 ];
 
 function Header() {
