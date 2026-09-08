@@ -19,7 +19,7 @@ const ComplaintCategorization = () => {
         aria-labelledby="complaint-manager-title"
       >
         <div className="role-copy">
-          <p className="eyebrow">Complaint manager</p>
+          <p className="eyebrow">Complaint supervisor</p>
           <h1 id="complaint-manager-title">Shape the next action.</h1>
           <p className="welcome-copy">
             Categorize this complaint and set its priority so the right team can
