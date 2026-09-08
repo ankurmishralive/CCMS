@@ -1,7 +1,82 @@
-import RolePage from '../RolePage';
+import { useState } from "react";
+import { useAppContext } from "../../context/AppContext";
 
-function ComplaintManager() {
-	return <RolePage eyebrow="Complaint manager" title="Turn difficult cases into progress." description="See the full complaint lifecycle, coordinate decisions, and make sure every resolution is measured and meaningful." accent="lime" stats={[{ value: '126', label: 'active cases' }, { value: '12', label: 'escalated' }, { value: '89%', label: 'resolution rate' }]} />;
-}
+const ComplaintManager = () => {
+  const { complaintData, updateComplaintData } = useAppContext();
+  const [category, setCategory] = useState(complaintData.category || "");
+  const [priority, setPriority] = useState(complaintData.priority || "");
+  const [isSaved, setIsSaved] = useState(false);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    updateComplaintData({ category, priority });
+    setIsSaved(true);
+  };
+
+  return (
+    <main className="role-main">
+      <section
+        className="role-panel role-panel-teal complaint-panel"
+        aria-labelledby="complaint-manager-title"
+      >
+        <div className="role-copy">
+          <p className="eyebrow">Complaint manager</p>
+          <h1 id="complaint-manager-title">Shape the next action.</h1>
+          <p className="welcome-copy">
+            Categorize this complaint and set its priority so the right team can
+            respond with focus.
+          </p>
+        </div>
+        <form className="complaint-form" onSubmit={handleSubmit}>
+          <div className="form-field">
+            <label htmlFor="complaint-category">Complaint category</label>
+            <select
+              id="complaint-category"
+              value={category}
+              onChange={(event) => {
+                setCategory(event.target.value);
+                setIsSaved(false);
+              }}
+              required
+            >
+              <option value="" disabled>
+                Select a category
+              </option>
+              <option value="Billing">Billing</option>
+              <option value="Technical">Technical</option>
+              <option value="Service">Service</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div className="form-field">
+            <label htmlFor="complaint-priority">Complaint priority</label>
+            <select
+              id="complaint-priority"
+              value={priority}
+              onChange={(event) => {
+                setPriority(event.target.value);
+                setIsSaved(false);
+              }}
+              required
+            >
+              <option value="" disabled>
+                Select a priority
+              </option>
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
+          <div className="form-actions">
+            <button type="submit">Save classification</button>
+          </div>
+          <p className="field-hint" role="status" aria-live="polite">
+            {isSaved ? "Complaint classification saved." : " "}
+          </p>
+        </form>
+      </section>
+    </main>
+  );
+};
 
 export default ComplaintManager;
