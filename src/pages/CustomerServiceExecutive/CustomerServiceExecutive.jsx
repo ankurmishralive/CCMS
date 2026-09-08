@@ -23,7 +23,7 @@ function CustomerServiceExecutive() {
 				<div className="complaint-heading">
 					<div className="role-copy">
 						<p className="eyebrow">Customer service executive</p>
-						<h1 id="complaint-form-title">Raise the complaint</h1>
+						<h1 id="complaint-form-title">Complaint Registration</h1>
 					</div>
 					<span className="complaint-count">{complaints.length} raised</span>
 				</div>
