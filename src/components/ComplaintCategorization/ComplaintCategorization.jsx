@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useAppContext } from "../../context/AppContext";
 
-const ComplaintCategorization = () => {
+const ComplaintCategorization = ({ onBack }) => {
   const { complaintData, updateComplaintData } = useAppContext();
   const [category, setCategory] = useState(complaintData.category || "");
   const [priority, setPriority] = useState(complaintData.priority || "");
@@ -25,6 +25,11 @@ const ComplaintCategorization = () => {
             Categorize this complaint and set its priority so the right team can
             respond with focus.
           </p>
+          {onBack && (
+            <button className="back-button" type="button" onClick={onBack}>
+              Back to complaint list
+            </button>
+          )}
         </div>
         <form className="complaint-form" onSubmit={handleSubmit}>
           <div className="form-field">
