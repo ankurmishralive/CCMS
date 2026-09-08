@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAppContext } from "../../context/AppContext";
 
-const ComplaintValidation = () => {
+const ComplaintValidation = ({ onBack }) => {
   const { complaintData, updateComplaintData } = useAppContext();
   const [validationStatus, setValidationStatus] = useState(
     complaintData.validationStatus || "",
@@ -30,6 +30,11 @@ const ComplaintValidation = () => {
             Review the available information and record whether this complaint
             is ready for the next step.
           </p>
+          {onBack && (
+            <button className="back-button" type="button" onClick={onBack}>
+              Back to complaint list
+            </button>
+          )}
         </div>
 
         <dl className="complaint-details" aria-label="Complaint details">

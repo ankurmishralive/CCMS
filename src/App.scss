@@ -536,6 +536,41 @@ h1 {
   vertical-align: top;
   line-height: 1.5;
 }
+.supervisor-complaint-table {
+  min-width: 900px;
+}
+.table-secondary-text {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.68rem;
+}
+.table-action-button,
+.back-button {
+  border: 1px solid var(--teal);
+  border-radius: 7px;
+  background: transparent;
+  color: var(--teal-dark);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+.table-action-button {
+  padding: 9px 13px;
+  white-space: nowrap;
+}
+.table-action-button:hover,
+.table-action-button:focus-visible,
+.back-button:hover,
+.back-button:focus-visible {
+  outline: none;
+  background: #edf5ef;
+}
+.back-button {
+  margin-top: 24px;
+  padding: 10px 14px;
+}
 .complaint-table tbody tr:last-child td {
   border-bottom: 0;
 }
