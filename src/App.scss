@@ -357,6 +357,7 @@ h1 {
   font-weight: 800;
 }
 .form-field input,
+.form-field select,
 .form-field textarea {
   width: 100%;
   padding: 13px 14px;
@@ -374,6 +375,9 @@ h1 {
 .form-field input {
   min-height: 48px;
 }
+.form-field select {
+  min-height: 48px;
+}
 .form-field textarea {
   min-height: 130px;
   resize: vertical;
@@ -384,6 +388,7 @@ h1 {
   color: #9aa8a8;
 }
 .form-field input:focus,
+.form-field select:focus,
 .form-field textarea:focus {
   border-color: var(--teal);
   box-shadow: 0 0 0 3px rgba(8, 126, 121, 0.12);
