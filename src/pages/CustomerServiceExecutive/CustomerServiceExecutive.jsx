@@ -1,76 +1,103 @@
-import { useEffect, useState } from 'react';
-import api from '../../api/api';
+import { useEffect, useState } from "react";
+import api from "../../api/api";
 
-const COMPLAINTS_API_URL = 'http://localhost:8088/api/complaints';
+const COMPLAINTS_API_URL = "http://localhost:8088/api/complaints";
 
 function CustomerServiceExecutive() {
-	const [activeTab, setActiveTab] = useState('raise');
-	const [complaints, setComplaints] = useState([]);
-	const [isLoadingComplaints, setIsLoadingComplaints] = useState(true);
-	const [complaintListError, setComplaintListError] = useState('');
-	const [isSubmitting, setIsSubmitting] = useState(false);
-	const [submitError, setSubmitError] = useState('');
+  const [activeTab, setActiveTab] = useState("raise");
+  const [complaints, setComplaints] = useState([]);
+  const [isLoadingComplaints, setIsLoadingComplaints] = useState(true);
+  const [complaintListError, setComplaintListError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
-	useEffect(() => {
-		const loadComplaints = async () => {
-			try {
-				const response = await api.get(COMPLAINTS_API_URL);
-				const complaintList = Array.isArray(response)
-					? response
-					: response?.data || response?.content || response?.complaints || [];
+  useEffect(() => {
+    const loadComplaints = async () => {
+      try {
+        const response = await api.get(COMPLAINTS_API_URL);
+        const complaintList = Array.isArray(response)
+          ? response
+          : response?.data || response?.content || response?.complaints || [];
 
-				setComplaints(Array.isArray(complaintList) ? complaintList : []);
-			} catch (error) {
-				setComplaintListError(error.message || 'Unable to load complaints.');
-			} finally {
-				setIsLoadingComplaints(false);
-			}
-		};
+        setComplaints(Array.isArray(complaintList) ? complaintList : []);
+      } catch (error) {
+        setComplaintListError(error.message || "Unable to load complaints.");
+      } finally {
+        setIsLoadingComplaints(false);
+      }
+    };
 
-		loadComplaints();
-	}, []);
+    loadComplaints();
+  }, []);
 
-	const handleSubmit = async (event) => {
-		event.preventDefault();
-		const formData = new FormData(event.currentTarget);
-		const complaint = {
-			customerName: formData.get('customerName'),
-			customerEmail: formData.get('customerEmail'),
-			mobileNumber: formData.get('mobileNumber'),
-			complaintTitle: formData.get('complaintTitle'),
-			complaintDescription: formData.get('complaintDescription'),
-		};
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const complaint = {
+      customerName: formData.get("customerName"),
+      customerEmail: formData.get("customerEmail"),
+      mobileNumber: formData.get("mobileNumber"),
+      complaintTitle: formData.get("complaintTitle"),
+      complaintDescription: formData.get("complaintDescription"),
+    };
 
-		setIsSubmitting(true);
-		setSubmitError('');
+    setIsSubmitting(true);
+    setSubmitError("");
 
-		try {
-			await api.post(COMPLAINTS_API_URL, complaint);
-			setComplaints((currentComplaints) => [complaint, ...currentComplaints]);
-			event.currentTarget.reset();
-			setActiveTab('list');
-		} catch (error) {
-			setSubmitError(error.message || 'Unable to submit complaint.');
-		} finally {
-			setIsSubmitting(false);
-		}
-	};
+    try {
+      await api.post(COMPLAINTS_API_URL, complaint);
+      setComplaints((currentComplaints) => [complaint, ...currentComplaints]);
+      event.currentTarget.reset();
+      setActiveTab("list");
+    } catch (error) {
+      setSubmitError(error.message || "Unable to submit complaint.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
-	return (
-		<main className="role-main">
-			<section className="role-panel role-panel-coral complaint-panel" aria-labelledby="complaint-form-title">
-				<div className="complaint-heading">
-					<div className="role-copy">
-						<p className="eyebrow">Customer service executive</p>
-						<h1 id="complaint-form-title">Complaint Registration</h1>
-					</div>
-					<span className="complaint-count">{complaints.length} raised</span>
-				</div>
+  return (
+    <main className="role-main">
+      <section
+        className="role-panel role-panel-coral complaint-panel"
+        aria-labelledby="complaint-form-title"
+      >
+        <div className="complaint-heading">
+          <div className="role-copy">
+            <p className="eyebrow">Customer service executive</p>
+            <h1 id="complaint-form-title">Complaint Registration</h1>
+          </div>
+          <span className="complaint-count">{complaints.length} raised</span>
+        </div>
 
-				<div className="complaint-tabs" role="tablist" aria-label="Complaint workspace">
-					<button className={activeTab === 'raise' ? 'tab-button active' : 'tab-button'} type="button" role="tab" aria-selected={activeTab === 'raise'} onClick={() => setActiveTab('raise')}>Raise Complaint</button>
-					<button className={activeTab === 'list' ? 'tab-button active' : 'tab-button'} type="button" role="tab" aria-selected={activeTab === 'list'} onClick={() => setActiveTab('list')}>Complaint List</button>
-				</div>
+        <div
+          className="complaint-tabs"
+          role="tablist"
+          aria-label="Complaint workspace"
+        >
+          <button
+            className={
+              activeTab === "raise" ? "tab-button active" : "tab-button"
+            }
+            type="button"
+            role="tab"
+            aria-selected={activeTab === "raise"}
+            onClick={() => setActiveTab("raise")}
+          >
+            Raise Complaint
+          </button>
+          <button
+            className={
+              activeTab === "list" ? "tab-button active" : "tab-button"
+            }
+            type="button"
+            role="tab"
+            aria-selected={activeTab === "list"}
+            onClick={() => setActiveTab("list")}
+          >
+            Complaint List
+          </button>
+        </div>
 
 				{activeTab === 'raise' ? <form className="complaint-form" onSubmit={handleSubmit}>
 					<div className="form-field">
