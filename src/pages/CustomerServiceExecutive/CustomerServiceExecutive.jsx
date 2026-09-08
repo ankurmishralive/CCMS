@@ -98,13 +98,14 @@ function CustomerServiceExecutive() {
 					</div>
 					{submitError && <p role="alert">{submitError}</p>}
 				</form> : <div className="complaint-list" role="tabpanel">
-					{isLoadingComplaints ? <p>Loading complaints...</p> : complaintListError ? <p role="alert">{complaintListError}</p> : complaints.length === 0 ? <div className="empty-list"><span className="empty-list-icon" aria-hidden="true">+</span><strong>No complaints raised yet</strong><span>New complaints will appear here after submission.</span><button type="button" onClick={() => setActiveTab('raise')}>Raise your first complaint</button></div> : <div className="complaint-table-wrapper"><table className="complaint-table"><thead><tr><th scope="col">Complaint ID</th><th scope="col">Customer</th><th scope="col">Email</th><th scope="col">Mobile</th><th scope="col">Title</th><th scope="col">Description</th></tr></thead><tbody>{complaints.map((complaint, index) => <tr key={`${complaint.complaintId || complaint.id || complaint.customerEmail}-${index}`}>
+					{isLoadingComplaints ? <p>Loading complaints...</p> : complaintListError ? <p role="alert">{complaintListError}</p> : complaints.length === 0 ? <div className="empty-list"><span className="empty-list-icon" aria-hidden="true">+</span><strong>No complaints raised yet</strong><span>New complaints will appear here after submission.</span><button type="button" onClick={() => setActiveTab('raise')}>Raise your first complaint</button></div> : <div className="complaint-table-wrapper"><table className="complaint-table"><thead><tr><th scope="col">Complaint ID</th><th scope="col">Customer</th><th scope="col">Email</th><th scope="col">Mobile</th><th scope="col">Title</th><th scope="col">Description</th><th scope="col">Status</th></tr></thead><tbody>{complaints.map((complaint, index) => <tr key={`${complaint.complaintId || complaint.id || complaint.customerEmail}-${index}`}>
 						<td className="complaint-id">{complaint.complaintId || complaint.id || '-'}</td>
 						<td>{complaint.customerName}</td>
 						<td>{complaint.customerEmail}</td>
 						<td>{complaint.mobileNumber}</td>
 						<td>{complaint.complaintTitle}</td>
 						<td>{complaint.complaintDescription}</td>
+						<td><span className="complaint-status">{complaint.status || '-'}</span></td>
 					</tr>)}</tbody></table></div>}
 				</div>}
 			</section>
