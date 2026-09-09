@@ -23,9 +23,16 @@ const buildUrl = (url, params) => {
 
 const getResponseData = async (response) => {
   const contentType = response.headers.get("content-type") || "";
-  const responseData = contentType.includes("application/json")
-    ? await response.json()
-    : await response.text();
+  const responseText = await response.text();
+  let responseData = responseText;
+
+  if (contentType.includes("application/json") && responseText) {
+    try {
+      responseData = JSON.parse(responseText);
+    } catch {
+      responseData = responseText;
+    }
+  }
 
   if (!response.ok) {
     const message =

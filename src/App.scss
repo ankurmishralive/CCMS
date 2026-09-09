@@ -121,6 +121,243 @@
     ),
     var(--paper);
 }
+.dashboard-panel {
+  width: min(100%, 1240px);
+  padding: clamp(28px, 5vw, 58px);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: linear-gradient(135deg, #fff 0%, #f2faf5 100%);
+  box-shadow: 0 22px 60px rgba(21, 42, 47, 0.08);
+}
+.dashboard-hero {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 36px;
+  padding-bottom: 38px;
+  border-bottom: 1px solid var(--line);
+}
+.dashboard-hero h1 {
+  max-width: 760px;
+}
+.dashboard-primary-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 13px;
+  flex-shrink: 0;
+  padding: 13px 17px;
+  border-radius: 8px;
+  background: var(--teal);
+  color: #fff;
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+.dashboard-primary-action span {
+  color: var(--lime);
+  font-size: 1.1rem;
+  line-height: 0.7;
+}
+.dashboard-primary-action:hover,
+.dashboard-primary-action:focus-visible {
+  outline: none;
+  background: var(--teal-dark);
+}
+.dashboard-alert {
+  margin: 22px 0 0;
+  padding: 12px 15px;
+  border-radius: 7px;
+  background: #fff0ea;
+  color: #c84d3a;
+  font-size: 0.75rem;
+}
+.dashboard-kpis {
+  display: grid;
+  grid-template-columns: 1.35fr repeat(3, 1fr);
+  gap: 12px;
+  margin: 30px 0 38px;
+}
+.dashboard-kpi {
+  display: grid;
+  min-height: 128px;
+  align-content: space-between;
+  gap: 12px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.78);
+}
+.dashboard-kpi-primary {
+  border-color: var(--teal);
+  background: var(--teal);
+  color: #fff;
+}
+.dashboard-kpi span,
+.dashboard-kpi small {
+  font-size: 0.68rem;
+}
+.dashboard-kpi span {
+  color: var(--muted);
+  font-weight: 700;
+}
+.dashboard-kpi-primary span,
+.dashboard-kpi-primary small {
+  color: #c9e4d9;
+}
+.dashboard-kpi strong {
+  font-size: 2.35rem;
+  line-height: 1;
+}
+.dashboard-kpi small {
+  color: var(--muted);
+}
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(360px, 0.88fr);
+  gap: 18px;
+}
+.dashboard-section {
+  min-width: 0;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.72);
+}
+.dashboard-section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 20px;
+}
+.dashboard-section-heading h2 {
+  margin: 7px 0 0;
+  font-size: 1.3rem;
+  letter-spacing: -0.03em;
+}
+.dashboard-section-heading .process-count {
+  white-space: nowrap;
+}
+.dashboard-text-link {
+  color: var(--teal-dark);
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.dashboard-text-link:hover,
+.dashboard-text-link:focus-visible {
+  color: var(--coral);
+}
+.dashboard-process-list {
+  display: grid;
+  gap: 7px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.dashboard-process-step {
+  display: grid;
+  grid-template-columns: 30px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 42px;
+  padding: 5px 9px;
+  border-radius: 7px;
+  color: var(--muted);
+}
+.dashboard-process-step .process-step-number {
+  width: 30px;
+  height: 30px;
+  flex-basis: 30px;
+  background: #e8efeb;
+  color: var(--muted);
+  font-size: 0.6rem;
+}
+.dashboard-process-step .process-step-name {
+  max-width: none;
+  font-size: 0.74rem;
+}
+.dashboard-process-step.active {
+  background: #edf5ef;
+  color: var(--teal-dark);
+}
+.dashboard-process-step.active .process-step-number {
+  background: var(--teal);
+  color: var(--lime);
+}
+.dashboard-process-step.complete {
+  color: var(--ink);
+}
+.dashboard-process-step.complete .process-step-number {
+  background: var(--lime);
+  color: var(--teal-dark);
+}
+.process-step-state {
+  font-family: "DM Mono", monospace;
+  font-size: 0.59rem;
+  text-transform: uppercase;
+}
+.dashboard-process-step.active .process-step-state {
+  color: var(--teal);
+}
+.dashboard-muted {
+  margin: 30px 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+.dashboard-queue {
+  border-top: 1px solid var(--line);
+}
+.dashboard-queue-head,
+.dashboard-queue-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 16px;
+}
+.dashboard-queue-head {
+  padding: 11px 0;
+  color: var(--muted);
+  font-family: "DM Mono", monospace;
+  font-size: 0.59rem;
+  text-transform: uppercase;
+}
+.dashboard-queue-row {
+  padding: 15px 0;
+  border-top: 1px solid var(--line);
+}
+.dashboard-queue-row div {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+.dashboard-queue-row strong {
+  overflow: hidden;
+  font-size: 0.75rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dashboard-queue-row small {
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 0.63rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dashboard-status {
+  padding: 5px 8px;
+  border-radius: 999px;
+  background: #edf5ef;
+  color: var(--teal-dark);
+  font-family: "DM Mono", monospace;
+  font-size: 0.59rem;
+  white-space: nowrap;
+}
+.dashboard-status-invalid-complaint {
+  background: #fff0ea;
+  color: #c84d3a;
+}
 .process-panel {
   width: min(100%, 1120px);
   padding: clamp(32px, 6vw, 72px);
@@ -408,6 +645,16 @@ h1 {
   color: var(--coral);
   font-family: "DM Mono", monospace;
   font-size: 0.64rem;
+}
+.submit-success {
+  margin: 24px 0 0;
+  padding: 13px 16px;
+  border: 1px solid #b9d8bd;
+  border-radius: 8px;
+  background: #e9f6e8;
+  color: #287342;
+  font-size: 0.78rem;
+  font-weight: 800;
 }
 .complaint-tabs {
   display: flex;
@@ -737,6 +984,12 @@ h1 {
   font-size: 1.1rem;
   line-height: 1.45;
 }
+.confirmation-error {
+  margin: 16px 0 0;
+  color: #c84d3a;
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
 .confirmation-actions {
   justify-content: flex-end;
 }
@@ -863,6 +1116,20 @@ h1 {
   .role-main {
     padding: 48px 16px 64px;
   }
+  .dashboard-hero {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .dashboard-primary-action {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .dashboard-kpis {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
   .process-intro {
     grid-template-columns: 1fr;
     gap: 24px;
@@ -903,9 +1170,16 @@ h1 {
   }
 }
 @media (max-width: 420px) {
+  .dashboard-panel,
   .process-panel,
   .role-panel {
     padding: 28px 22px;
+  }
+  .dashboard-kpis {
+    grid-template-columns: 1fr;
+  }
+  .dashboard-section {
+    padding: 18px;
   }
   .process-heading {
     align-items: flex-start;

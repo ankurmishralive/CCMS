@@ -6,7 +6,6 @@ const menuItems = [
   { label: "Complaint Supervisor", path: "/complaint-supervisor" },
   { label: "Complaint Manager", path: "/complaint-manager" },
   { label: "Support Engineer", path: "/support-engineer" },
-  { label: "Team Lead", path: "/team-lead" },
   { label: "Customer", path: "/customer" },
 ];
 

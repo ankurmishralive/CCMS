@@ -3,6 +3,40 @@ import api from "../../api/api";
 
 const COMPLAINTS_API_URL = "http://localhost:8088/api/complaints";
 
+const normalizeComplaint = (complaint = {}) => {
+  const source = complaint || {};
+console.log("normalizeComplaint source:", source);
+  return {
+  ...source,
+  complaintId:
+    source.complaintId || source.complaint_id || source.id || "",
+  customerName: source.customerName || source.customer_name || "",
+  customerEmail: source.customerEmail || source.customer_email || "",
+  mobileNumber: source.mobileNumber || source.mobile_number || "",
+  complaintTitle: source.complaintTitle || source.complaint_title || "",
+  complaintDescription:
+    source.complaintDescription || source.complaint_description || "",
+  status: source.status || "Initiated",
+  };
+};
+
+const getComplaintList = (response) => {
+  const complaintList = Array.isArray(response)
+    ? response
+    : response?.data || response?.content || response?.complaints || [];
+
+  return Array.isArray(complaintList)
+    ? complaintList.map(normalizeComplaint)
+    : [];
+};
+
+const getComplaintFromResponse = (response) => {
+  if (Array.isArray(response)) return normalizeComplaint(response[0]);
+  return normalizeComplaint(
+    response?.data || response?.complaint || response,
+  );
+};
+
 function CustomerServiceExecutive() {
   const [activeTab, setActiveTab] = useState("raise");
   const [complaints, setComplaints] = useState([]);
@@ -10,16 +44,13 @@ function CustomerServiceExecutive() {
   const [complaintListError, setComplaintListError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
+  const [submitSuccess, setSubmitSuccess] = useState("");
 
   useEffect(() => {
     const loadComplaints = async () => {
       try {
         const response = await api.get(COMPLAINTS_API_URL);
-        const complaintList = Array.isArray(response)
-          ? response
-          : response?.data || response?.content || response?.complaints || [];
-
-        setComplaints(Array.isArray(complaintList) ? complaintList : []);
+        setComplaints(getComplaintList(response));
       } catch (error) {
         setComplaintListError(error.message || "Unable to load complaints.");
       } finally {
@@ -32,7 +63,8 @@ function CustomerServiceExecutive() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    const formData = new FormData(form);
     const complaint = {
       customerName: formData.get("customerName"),
       customerEmail: formData.get("customerEmail"),
@@ -43,11 +75,30 @@ function CustomerServiceExecutive() {
 
     setIsSubmitting(true);
     setSubmitError("");
+    setSubmitSuccess("");
 
     try {
-      await api.post(COMPLAINTS_API_URL, complaint);
-      setComplaints((currentComplaints) => [complaint, ...currentComplaints]);
-      event.currentTarget.reset();
+      const response = await api.post(COMPLAINTS_API_URL, complaint);
+      const createdComplaint = getComplaintFromResponse(response);
+      let updatedComplaints = [];
+
+      try {
+        const refreshedResponse = await api.get(COMPLAINTS_API_URL);
+        updatedComplaints = getComplaintList(refreshedResponse);
+      } catch {
+        updatedComplaints = [];
+      }
+
+      if (updatedComplaints.length > 0) {
+        setComplaints(updatedComplaints);
+      } else {
+        setComplaints((currentComplaints) => [
+          { ...complaint, ...createdComplaint },
+          ...currentComplaints,
+        ]);
+      }
+      form.reset();
+      setSubmitSuccess("Complaint registered successfully.");
       setActiveTab("list");
     } catch (error) {
       setSubmitError(error.message || "Unable to submit complaint.");
@@ -69,6 +120,8 @@ function CustomerServiceExecutive() {
           </div>
           <span className="complaint-count">{complaints.length} raised</span>
         </div>
+
+        {submitSuccess && <p className="submit-success" role="status" aria-live="polite">{submitSuccess}</p>}
 
         <div
           className="complaint-tabs"
