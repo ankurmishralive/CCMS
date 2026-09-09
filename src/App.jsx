@@ -17,12 +17,21 @@ import "./App.scss";
 
 const complaintProcess = [
   { name: "Complaint Registration", statuses: ["initiated"] },
-  { name: "Complaint Validation", statuses: ["validated", "invalid complaint"] },
-  { name: "Categorization & Prioritization", statuses: ["categorized", "prioritized"] },
+  {
+    name: "Complaint Validation",
+    statuses: ["validated", "invalid complaint"],
+  },
+  {
+    name: "Categorization & Prioritization",
+    statuses: ["categorized", "prioritized"],
+  },
   { name: "Team Assignment", statuses: ["assigned"] },
   { name: "Investigation", statuses: ["investigating", "under investigation"] },
   { name: "Determine Resolution Path", statuses: ["resolution path"] },
-  { name: "Resolution Implementation", statuses: ["in progress", "resolution in progress"] },
+  {
+    name: "Resolution Implementation",
+    statuses: ["in progress", "resolution in progress"],
+  },
   { name: "Customer Confirmation", statuses: ["customer confirmation"] },
   { name: "Closure", statuses: ["closed", "resolved"] },
 ];
@@ -45,9 +54,11 @@ const getProcessStepState = (step, index, complaints) => {
   );
   const hasLaterStage = complaintProcess
     .slice(index + 1)
-    .some((laterStep) => complaints.some((complaint) =>
-      laterStep.statuses.includes(getStatus(complaint).toLowerCase()),
-    ));
+    .some((laterStep) =>
+      complaints.some((complaint) =>
+        laterStep.statuses.includes(getStatus(complaint).toLowerCase()),
+      ),
+    );
 
   if (hasMatchingComplaint) return "active";
   if (hasLaterStage) return "complete";
@@ -81,7 +92,8 @@ function Home() {
   }, {});
   const initiatedCount = statusCounts.initiated || 0;
   const validatedCount = statusCounts.validated || 0;
-  const resolvedCount = (statusCounts.resolved || 0) + (statusCounts.closed || 0);
+  const resolvedCount =
+    (statusCounts.resolved || 0) + (statusCounts.closed || 0);
   const activeCount = complaints.length - resolvedCount;
 
   return (
@@ -91,34 +103,133 @@ function Home() {
           <div>
             <p className="eyebrow">Operations dashboard / live view</p>
             <h1 id="dashboard-title">Complaint command center.</h1>
-            <p className="process-summary">Monitor the queue, understand where complaints are moving, and keep every customer conversation visible.</p>
+            <p className="process-summary">
+              Monitor the queue, understand where complaints are moving, and
+              keep every customer conversation visible.
+            </p>
           </div>
-          <Link className="dashboard-primary-action" to="/customer-service-executive">Register complaint <span aria-hidden="true">+</span></Link>
+          <Link
+            className="dashboard-primary-action"
+            to="/customer-service-executive"
+          >
+            Register complaint <span aria-hidden="true">+</span>
+          </Link>
         </div>
 
-        {error && <p className="dashboard-alert" role="alert">{error}</p>}
+        {error && (
+          <p className="dashboard-alert" role="alert">
+            {error}
+          </p>
+        )}
 
         <div className="dashboard-kpis" aria-label="Complaint summary">
-          <div className="dashboard-kpi dashboard-kpi-primary"><span>Total complaints</span><strong>{isLoading ? "--" : complaints.length}</strong><small>All records in the system</small></div>
-          <div className="dashboard-kpi"><span>Active queue</span><strong>{isLoading ? "--" : activeCount}</strong><small>Still moving through process</small></div>
-          <div className="dashboard-kpi"><span>Initiated</span><strong>{isLoading ? "--" : initiatedCount}</strong><small>Waiting for validation</small></div>
-          <div className="dashboard-kpi"><span>Validated</span><strong>{isLoading ? "--" : validatedCount}</strong><small>Ready for next stage</small></div>
+          <div className="dashboard-kpi dashboard-kpi-primary">
+            <span>Total complaints</span>
+            <strong>{isLoading ? "--" : complaints.length}</strong>
+            <small>All records in the system</small>
+          </div>
+          <div className="dashboard-kpi">
+            <span>Active queue</span>
+            <strong>{isLoading ? "--" : activeCount}</strong>
+            <small>Still moving through process</small>
+          </div>
+          <div className="dashboard-kpi">
+            <span>Initiated</span>
+            <strong>{isLoading ? "--" : initiatedCount}</strong>
+            <small>Waiting for validation</small>
+          </div>
+          <div className="dashboard-kpi">
+            <span>Validated</span>
+            <strong>{isLoading ? "--" : validatedCount}</strong>
+            <small>Ready for next stage</small>
+          </div>
         </div>
 
         <div className="dashboard-grid">
-          <section className="dashboard-section dashboard-process-section" aria-labelledby="process-title">
-            <div className="dashboard-section-heading"><div><span className="process-kicker">The complaint lifecycle</span><h2 id="process-title">Process control</h2></div><span className="process-count">09 stages</span></div>
+          <section
+            className="dashboard-section dashboard-process-section"
+            aria-labelledby="process-title"
+          >
+            <div className="dashboard-section-heading">
+              <div>
+                <span className="process-kicker">The complaint lifecycle</span>
+                <h2 id="process-title">Process control</h2>
+              </div>
+              <span className="process-count">09 stages</span>
+            </div>
             <ol className="dashboard-process-list">
               {complaintProcess.map((step, index) => {
                 const state = getProcessStepState(step, index, complaints);
-                return <li className={`dashboard-process-step ${state}`} key={step.name}><span className="process-step-number">{String(index + 1).padStart(2, "0")}</span><span className="process-step-name">{step.name}</span><span className="process-step-state">{state === "active" ? "Live" : state === "complete" ? "Complete" : "Next"}</span></li>;
+                return (
+                  <li
+                    className={`dashboard-process-step ${state}`}
+                    key={step.name}
+                  >
+                    <span className="process-step-number">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <span className="process-step-name">{step.name}</span>
+                    <span className="process-step-state">
+                      {state === "active"
+                        ? "Live"
+                        : state === "complete"
+                          ? "Complete"
+                          : "Next"}
+                    </span>
+                  </li>
+                );
               })}
             </ol>
           </section>
 
-          <section className="dashboard-section dashboard-queue-section" aria-labelledby="queue-title">
-            <div className="dashboard-section-heading"><div><span className="process-kicker">Live queue</span><h2 id="queue-title">Recent complaints</h2></div><Link className="dashboard-text-link" to="/complaint-supervisor">Open supervisor view</Link></div>
-            {isLoading ? <p className="dashboard-muted">Loading live complaints...</p> : complaints.length === 0 ? <p className="dashboard-muted">No complaints have been registered yet.</p> : <div className="dashboard-queue"><div className="dashboard-queue-head"><span>Complaint</span><span>Status</span></div>{complaints.slice(0, 6).map((complaint, index) => <div className="dashboard-queue-row" key={`${complaint.complaintId || complaint.id || index}`}><div><strong>{complaint.complaintTitle || "Untitled complaint"}</strong><small>{complaint.customerName || "Unknown customer"} / {complaint.complaintId || complaint.id || "No ID"}</small></div><span className={`dashboard-status dashboard-status-${getStatus(complaint).toLowerCase().replaceAll(" ", "-")}`}>{getStatus(complaint)}</span></div>)}</div>}
+          <section
+            className="dashboard-section dashboard-queue-section"
+            aria-labelledby="queue-title"
+          >
+            <div className="dashboard-section-heading">
+              <div>
+                <span className="process-kicker">Live queue</span>
+                <h2 id="queue-title">Recent complaints</h2>
+              </div>
+              <Link className="dashboard-text-link" to="/complaint-supervisor">
+                Open supervisor view
+              </Link>
+            </div>
+            {isLoading ? (
+              <p className="dashboard-muted">Loading live complaints...</p>
+            ) : complaints.length === 0 ? (
+              <p className="dashboard-muted">
+                No complaints have been registered yet.
+              </p>
+            ) : (
+              <div className="dashboard-queue">
+                <div className="dashboard-queue-head">
+                  <span>Complaint</span>
+                  <span>Status</span>
+                </div>
+                {complaints.slice(0, 6).map((complaint, index) => (
+                  <div
+                    className="dashboard-queue-row"
+                    key={`${complaint.complaintId || complaint.id || index}`}
+                  >
+                    <div>
+                      <strong>
+                        {complaint.complaintTitle || "Untitled complaint"}
+                      </strong>
+                      <small>
+                        {complaint.customerName || "Unknown customer"} /{" "}
+                        {complaint.complaintId || complaint.id || "No ID"}
+                      </small>
+                    </div>
+                    <span
+                      className={`dashboard-status dashboard-status-${getStatus(complaint).toLowerCase().replaceAll(" ", "-")}`}
+                    >
+                      {getStatus(complaint)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
           </section>
         </div>
       </section>
@@ -143,8 +254,17 @@ function App() {
             element={<ComplaintSupervisor />}
           />
           <Route path="/complaint-manager" element={<ComplaintManager />} />
+          <Route
+            path="/complaint-manager/:taskId"
+            element={<ComplaintManager />}
+          />
           <Route path="/support-engineer" element={<SupportEngineer />} />
+          <Route
+            path="/support-engineer/:taskId"
+            element={<SupportEngineer />}
+          />
           <Route path="/customer" element={<Customer />} />
+          <Route path="/customer/:complaintId" element={<Customer />} />
         </Routes>
         <Footer />
       </div>

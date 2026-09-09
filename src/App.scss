@@ -646,6 +646,60 @@ h1 {
   font-family: "DM Mono", monospace;
   font-size: 0.64rem;
 }
+.complaint-filter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 38px;
+  padding: 16px 18px;
+  border: 1px solid #c9ddd7;
+  border-radius: 10px;
+  background: rgba(237, 245, 239, 0.72);
+}
+.complaint-filter-copy {
+  display: grid;
+  gap: 4px;
+}
+.complaint-filter-copy label {
+  color: var(--ink);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+.complaint-filter-copy small {
+  color: var(--muted);
+  font-size: 0.68rem;
+}
+.complaint-filter-control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.complaint-filter-control select {
+  min-width: 164px;
+  min-height: 42px;
+  padding: 10px 34px 10px 12px;
+  border: 1px solid #a9c8c0;
+  border-radius: 7px;
+  outline: none;
+  background: var(--surface);
+  color: var(--teal-dark);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+.complaint-filter-control select:focus {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(8, 126, 121, 0.12);
+}
+.complaint-filter-value {
+  color: var(--teal);
+  font-family: "DM Mono", monospace;
+  font-size: 0.62rem;
+  white-space: nowrap;
+}
 .submit-success {
   margin: 24px 0 0;
   padding: 13px 16px;
@@ -1154,6 +1208,17 @@ h1 {
   }
   .complaint-heading {
     flex-direction: column;
+  }
+  .complaint-filter {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .complaint-filter-control {
+    justify-content: space-between;
+  }
+  .complaint-filter-control select {
+    flex: 1;
   }
   .complaint-count {
     align-self: flex-start;
