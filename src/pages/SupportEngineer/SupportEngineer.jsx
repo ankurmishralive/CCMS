@@ -108,7 +108,7 @@ function SupportEngineer() {
             <p className="eyebrow">Support engineer</p>
             <h1 id="support-engineer-title">
               {selectedComplaint
-                ? "Solve the issue behind the issue."
+                ? "Solve the issue behind the complaint."
                 : "Resolution complaints."}
             </h1>
             {!selectedComplaint && (
@@ -265,9 +265,7 @@ function SupportEngineer() {
               className="resolve-section"
               aria-labelledby="resolve-section-title"
             >
-              <p className="eyebrow">Resolve Section</p>
-              <h2 id="resolve-section-title">Record the resolution.</h2>
-              <form className="complaint-form" onSubmit={handleResolve}>
+              <form className="complaint-form support" onSubmit={handleResolve}>
                 <div className="form-field form-field-wide">
                   <label htmlFor="resolution-remark">Remark</label>
                   <textarea

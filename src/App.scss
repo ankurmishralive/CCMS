@@ -745,6 +745,11 @@ h1 {
   margin-top: 54px;
   padding-top: 30px;
   border-top: 1px solid var(--line);
+
+  &.support {
+    border-top: 0;
+    margin-top: 0;
+  }
 }
 .form-field {
   display: grid;
@@ -949,6 +954,12 @@ h1 {
   font-size: 0.68rem;
   font-weight: 500;
   white-space: nowrap;
+
+  &.table-cell {
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 .complaint-status {
   display: inline-block;
