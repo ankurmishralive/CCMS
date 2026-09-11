@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import api from "../../api/api";
 
 const COMPLAINTS_API_URL = "http://localhost:8088/api/complaints";
+const WITHDRAW_COMPLAINT_API_URL = "http://localhost:8088/api/complaints/withdrawComplaint";
 
 const normalizeComplaint = (complaint = {}) => {
   const source = complaint || {};
-console.log("normalizeComplaint source:", source);
   return {
   ...source,
   complaintId:
@@ -13,6 +13,7 @@ console.log("normalizeComplaint source:", source);
   customerName: source.customerName || source.customer_name || "",
   customerEmail: source.customerEmail || source.customer_email || "",
   mobileNumber: source.mobileNumber || source.mobile_number || "",
+  customerId: source.customerId || source.customer_id || source.complaintId || source.complaint_id || source.id || "",
   complaintTitle: source.complaintTitle || source.complaint_title || "",
   complaintDescription:
     source.complaintDescription || source.complaint_description || "",
@@ -42,9 +43,13 @@ function CustomerServiceExecutive() {
   const [complaints, setComplaints] = useState([]);
   const [isLoadingComplaints, setIsLoadingComplaints] = useState(true);
   const [complaintListError, setComplaintListError] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [submitSuccess, setSubmitSuccess] = useState("");
+  const [withdrawComplaint, setWithdrawComplaint] = useState(null);
+  const [isWithdrawing, setIsWithdrawing] = useState(false);
+  const [withdrawError, setWithdrawError] = useState("");
 
   useEffect(() => {
     const loadComplaints = async () => {
@@ -60,6 +65,44 @@ function CustomerServiceExecutive() {
 
     loadComplaints();
   }, []);
+
+  const isWithdrawnComplaint = (complaint) =>
+    String(complaint.status || "").toLowerCase() === "withdrawn";
+
+  const filteredComplaints = complaints.filter((complaint) => {
+    const searchValue = searchTerm.trim().toLowerCase();
+    if (!searchValue) return true;
+
+    return [complaint.customerName, complaint.complaintId]
+      .some((value) => String(value || "").toLowerCase().includes(searchValue));
+  });
+
+  const confirmWithdraw = async () => {
+    if (!withdrawComplaint || isWithdrawing) return;
+
+    const complaintId = withdrawComplaint.complaintId;
+    if (!complaintId) {
+      setWithdrawError("Complaint ID is not available for this complaint.");
+      return;
+    }
+
+    setIsWithdrawing(true);
+    setWithdrawError("");
+
+    try {
+      await api.post(
+        `${WITHDRAW_COMPLAINT_API_URL}/${encodeURIComponent(complaintId)}`,
+        withdrawComplaint,
+      );
+      const response = await api.get(COMPLAINTS_API_URL);
+      setComplaints(getComplaintList(response));
+      setWithdrawComplaint(null);
+    } catch (error) {
+      setWithdrawError(error.message || "Unable to withdraw complaint.");
+    } finally {
+      setIsWithdrawing(false);
+    }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -178,7 +221,12 @@ function CustomerServiceExecutive() {
 					</div>
 					{submitError && <p role="alert">{submitError}</p>}
 				</form> : <div className="complaint-list" role="tabpanel">
-					{isLoadingComplaints ? <p>Loading complaints...</p> : complaintListError ? <p role="alert">{complaintListError}</p> : complaints.length === 0 ? <div className="empty-list"><span className="empty-list-icon" aria-hidden="true">+</span><strong>No complaints raised yet</strong><span>New complaints will appear here after submission.</span><button type="button" onClick={() => setActiveTab('raise')}>Raise your first complaint</button></div> : <div className="complaint-table-wrapper"><table className="complaint-table"><thead><tr><th scope="col">Complaint ID</th><th scope="col">Customer</th><th scope="col">Email</th><th scope="col">Mobile</th><th scope="col">Title</th><th scope="col">Description</th><th scope="col">Status</th></tr></thead><tbody>{complaints.map((complaint, index) => <tr key={`${complaint.complaintId || complaint.id || complaint.customerEmail}-${index}`}>
+					{isLoadingComplaints ? <p>Loading complaints...</p> : complaintListError ? <p role="alert">{complaintListError}</p> : complaints.length === 0 ? <div className="empty-list"><span className="empty-list-icon" aria-hidden="true">+</span><strong>No complaints raised yet</strong><span>New complaints will appear here after submission.</span><button type="button" onClick={() => setActiveTab('raise')}>Raise your first complaint</button></div> : <>
+            <div className="complaint-search">
+              <label htmlFor="complaint-search-input">Search complaints</label>
+              <input id="complaint-search-input" type="search" value={searchTerm} onChange={(event) => setSearchTerm(event.target.value)} placeholder="Search by customer name or complaint ID" />
+            </div>
+            {filteredComplaints.length === 0 ? <div className="empty-list"><strong>No complaints match your search.</strong></div> : <div className="complaint-table-wrapper"><table className="complaint-table"><thead><tr><th scope="col">Complaint ID</th><th scope="col">Customer</th><th scope="col">Email</th><th scope="col">Mobile</th><th scope="col">Title</th><th scope="col">Description</th><th scope="col">Status</th><th scope="col">Withdraw</th></tr></thead><tbody>{filteredComplaints.map((complaint, index) => <tr key={`${complaint.complaintId || complaint.id || complaint.customerEmail}-${index}`}>
 						<td className="complaint-id">{complaint.complaintId || complaint.id || '-'}</td>
 						<td>{complaint.customerName}</td>
 						<td>{complaint.customerEmail}</td>
@@ -186,8 +234,21 @@ function CustomerServiceExecutive() {
 						<td>{complaint.complaintTitle}</td>
 						<td>{complaint.complaintDescription}</td>
 						<td><span className="complaint-status">{complaint.status || '-'}</span></td>
-					</tr>)}</tbody></table></div>}
+						<td><button type="button" className="withdraw-button" onClick={() => { setWithdrawError(""); setWithdrawComplaint(complaint); }} disabled={isWithdrawnComplaint(complaint)}>{isWithdrawnComplaint(complaint) ? 'Withdrawn' : 'Withdraw'}</button></td>
+          </tr>)}</tbody></table></div>}
+          </>}
 				</div>}
+
+        {withdrawComplaint && <div className="confirmation-backdrop" role="presentation" onClick={() => !isWithdrawing && setWithdrawComplaint(null)}>
+          <div className="confirmation-dialog" role="dialog" aria-modal="true" aria-labelledby="withdraw-confirmation-title" onClick={(event) => event.stopPropagation()}>
+            <h2 id="withdraw-confirmation-title">Are you sure you want to withdraw this complaint?</h2>
+            {withdrawError && <p className="confirmation-error" role="alert">{withdrawError}</p>}
+            <div className="confirmation-actions">
+              <button type="button" className="secondary-button" onClick={() => setWithdrawComplaint(null)} disabled={isWithdrawing}>No</button>
+              <button type="button" className="withdraw-button" onClick={confirmWithdraw} disabled={isWithdrawing}>{isWithdrawing ? "Withdrawing..." : "Yes"}</button>
+            </div>
+          </div>
+        </div>}
 			</section>
 		</main>
 	);

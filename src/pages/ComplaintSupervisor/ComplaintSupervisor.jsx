@@ -39,7 +39,9 @@ const ComplaintSupervisor = () => {
 
         setComplaints(
           Array.isArray(complaintList)
-            ? complaintList.map(normalizeComplaintTask)
+            ? complaintList
+              .map(normalizeComplaintTask)
+              .filter((complaint) => complaint.status.toLowerCase() !== "withdrawn")
             : [],
         );
       } catch (requestError) {

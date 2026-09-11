@@ -838,6 +838,32 @@ h1 {
 .complaint-list {
   padding-top: 30px;
 }
+.complaint-search {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.complaint-search label {
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+.complaint-search input {
+  width: min(100%, 430px);
+  min-height: 42px;
+  padding: 10px 13px;
+  border: 1px solid #a9c8c0;
+  border-radius: 7px;
+  outline: none;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.76rem;
+}
+.complaint-search input:focus {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(8, 126, 121, 0.12);
+}
 .empty-list {
   display: grid;
   justify-items: center;
@@ -986,7 +1012,8 @@ h1 {
   margin-top: 28px;
 }
 .validate-button,
-.invalid-button {
+.invalid-button,
+.withdraw-button {
   padding: 11px 16px;
   border: 0;
   border-radius: 7px;
@@ -1002,6 +1029,12 @@ h1 {
 .invalid-button {
   background: var(--coral);
 }
+.withdraw-button {
+  padding: 8px 11px;
+  background: var(--coral);
+  font-size: 0.68rem;
+  white-space: nowrap;
+}
 .validate-button:hover,
 .validate-button:focus-visible {
   background: var(--teal-dark);
@@ -1010,10 +1043,21 @@ h1 {
 .invalid-button:focus-visible {
   background: #c84d3a;
 }
+.withdraw-button:hover,
+.withdraw-button:focus-visible {
+  outline: none;
+  background: #c84d3a;
+}
 .validate-button:focus-visible,
-.invalid-button:focus-visible {
+.invalid-button:focus-visible,
+.withdraw-button:focus-visible {
   outline: 3px solid rgba(8, 126, 121, 0.22);
   outline-offset: 2px;
+}
+.withdraw-button:disabled {
+  background: #aeb9b8;
+  cursor: not-allowed;
+  opacity: 0.8;
 }
 .confirmation-backdrop {
   position: fixed;

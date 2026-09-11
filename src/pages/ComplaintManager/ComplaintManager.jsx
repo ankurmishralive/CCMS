@@ -24,7 +24,11 @@ const getTaskList = (response) => {
     ? response
     : response?.data || response?.content || response?.tasks || [];
 
-  return Array.isArray(taskList) ? taskList.map(normalizeTask) : [];
+  return Array.isArray(taskList)
+    ? taskList
+        .map(normalizeTask)
+        .filter((task) => task.status.toLowerCase() !== "withdrawn")
+    : [];
 };
 
 const ComplaintManager = () => {

@@ -19,12 +19,16 @@ const getComplaintList = (response) => {
     : response?.data || response?.content || response?.complaints || [];
 
   return Array.isArray(complaintList)
-    ? complaintList.map(normalizeComplaint)
+    ? complaintList
+        .map(normalizeComplaint)
+        .filter((complaint) => complaint.status.toLowerCase() !== "withdrawn")
     : [];
 };
 
-const getComplaintDetails = (response) =>
-  normalizeComplaint(response?.data || response?.complaint || response);
+const getComplaintDetails = (response) => {
+  const complaint = normalizeComplaint(response?.data || response?.complaint || response);
+  return complaint.status.toLowerCase() === "withdrawn" ? null : complaint;
+};
 
 function Customer() {
   const navigate = useNavigate();

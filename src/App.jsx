@@ -43,7 +43,9 @@ const getComplaintList = (response) => {
     ? response
     : response?.data || response?.content || response?.complaints || [];
 
-  return Array.isArray(list) ? list : [];
+  return Array.isArray(list)
+    ? list.filter((complaint) => String(complaint.status || "").toLowerCase() !== "withdrawn")
+    : [];
 };
 
 const getStatus = (complaint) => (complaint.status || "Initiated").trim();
